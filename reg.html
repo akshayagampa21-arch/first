@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Simple Registration</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f7fb; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
+    .card { background:#fff; padding:24px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.08); width:320px; }
+    .card h2 { margin:0 0 12px; font-size:20px; }
+    label { display:block; margin:10px 0 6px; font-size:13px; }
+    input[type="text"], input[type="email"], input[type="password"]{ width:100%; padding:8px 10px; border:1px solid #d3dbe6; border-radius:4px; box-sizing:border-box; }
+    .row { display:flex; gap:8px; }
+    .small { flex:1; }
+    button { margin-top:14px; width:100%; padding:10px; border:0; background:#007bff; color:#fff; border-radius:4px; cursor:pointer; font-size:15px; }
+    .error { color:#b00020; font-size:13px; margin-top:8px; display:none; }
+    .success { color:green; font-size:14px; margin-top:8px; display:none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Create account</h2>
+    <form id="regForm" novalidate>
+      <label for="first">First name</label>
+      <input id="first" name="first" type="text" required />
+
+      <label for="last">Last name</label>
+      <input id="last" name="last" type="text" required />
+
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required />
+
+      <label for="pwd">Password</label>
+      <input id="pwd" name="password" type="password" minlength="6" required />
+
+      <label for="confirm">Confirm password</label>
+      <input id="confirm" name="confirm" type="password" required />
+
+      <div class="error" id="err"></div>
+      <div class="success" id="ok">Registration successful (client-side only).</div>
+
+      <button type="submit">Register</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('regForm');
+    const err = document.getElementById('err');
+    const ok = document.getElementById('ok');
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      err.style.display = 'none';
+      ok.style.display = 'none';
+
+      const first = form.first.value.trim();
+      const last = form.last.value.trim();
+      const email = form.email.value.trim();
+      const password = form.password.value;
+      const confirm = form.confirm.value;
+
+      if (!first || !last) return showError('Please enter your full name.');
+      if (!validateEmail(email)) return showError('Please enter a valid email.');
+      if (password.length < 6) return showError('Password must be at least 6 characters.');
+      if (password !== confirm) return showError('Passwords do not match.');
+
+      // At this point you would send data to a server (fetch/XHR).
+      // For demo, show success message:
+      ok.style.display = 'block';
+      form.reset();
+    });
+
+    function showError(message){
+      err.textContent = message;
+      err.style.display = 'block';
+    }
+
+    function validateEmail(email){
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+  </script>
+</body>
+</html>
